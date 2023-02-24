@@ -19,17 +19,17 @@ public class CustomerServiceImpl implements CustomerService {
 		return customerRepository.save(customer);
 	}
 
-	@Override
-	public String loginCustomer(Login login) throws CustomerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String changePassword(Login login) throws CustomerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public String loginCustomer(Login login) throws CustomerException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public String changePassword(Login login) throws CustomerException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
 	public String forgetPassword(Integer id) throws CustomerException {
