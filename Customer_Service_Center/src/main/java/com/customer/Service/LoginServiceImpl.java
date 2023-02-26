@@ -77,13 +77,13 @@ public class LoginServiceImpl implements LoginService {
 
 			Admin existAdmin = adminDao.findByEmail(login.getEmail());
 			if (existAdmin == null)
-				throw new LoginException("Please Enter a valid loginS");
+				throw new LoginException("Please Enter a valid login");
 
 			Optional<CurrentUserSession> validAdminSessionOpt = sessionDao.findById(existAdmin.getAdminId());
 
 			if (validAdminSessionOpt.isPresent()) {
 
-				throw new LoginException("User already Logged exist with this Email");
+				throw new LoginException("User allready Logged  with this Email");
 
 			}
 
@@ -106,19 +106,21 @@ public class LoginServiceImpl implements LoginService {
 		if (login.getUser_Type().equals("OPERATOR")) {
 
 			Operator existingOperator = operatorDao.findByEmail(login.getEmail());
-			if (existingOperator == null)
-				throw new LoginException("Please Enter a valid loginS");
-
-			java.util.Optional<CurrentUserSession> validOperatorSessionOpt = sessionDao
-					.findById(existingOperator.getOperatorId());
+			
+	
+			if (existingOperator == null) {
+				throw new LoginException("Please Enter a valid login");
+			}
+			Optional<CurrentUserSession> validOperatorSessionOpt = sessionDao.findById(existingOperator.getOperatorId());
 
 			if (validOperatorSessionOpt.isPresent()) {
 
 				throw new LoginException("User already Logged In with this Email");
 
 			}
-
-			if (existingOperator.equals(login.getPassword())) {
+			//System.out.println(existingOperator.getPassword());
+			
+			if (existingOperator.getPassword().equals(login.getPassword())) {
 
 				String key = UUID.randomUUID().toString();
 
@@ -126,11 +128,14 @@ public class LoginServiceImpl implements LoginService {
 						login.getUser_Type());
 
 				sessionDao.save(currentUserSession);
-
+	
 				return key;
-			} else
-				throw new LoginException("Passowrd incorrect");
-		} else
+			
+			} 
+			else
+				throw new LoginException("Password incorrect");
+		}
+		else
 			throw new LoginException("Please Enter a valid User");
 		
 	}
