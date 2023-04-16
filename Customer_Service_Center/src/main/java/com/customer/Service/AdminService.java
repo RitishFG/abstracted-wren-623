@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.customer.DTO.OperatorDTO;
 import com.customer.Entity.Department;
-import com.customer.Entity.Issue;
 import com.customer.Entity.Operator;
+import com.customer.Entity.Solution;
 import com.customer.Exception.DepartmentException;
+import com.customer.Exception.IssueException;
 import com.customer.Exception.LoginException;
 import com.customer.Exception.OperatorException;
 

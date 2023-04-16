@@ -7,16 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.customer.DTO.OperatorDTO;
-import com.customer.Entity.Call;
 import com.customer.Entity.CurrentUserSession;
 import com.customer.Entity.Department;
 import com.customer.Entity.Issue;
 import com.customer.Entity.Operator;
+import com.customer.Entity.Solution;
 import com.customer.Exception.DepartmentException;
+import com.customer.Exception.IssueException;
 import com.customer.Exception.LoginException;
 import com.customer.Exception.OperatorException;
 import com.customer.Repository.CurrentUserSessionRepository;
 import com.customer.Repository.DepartmentDao;
+import com.customer.Repository.IssueRepository;
 import com.customer.Repository.OperatorDao;
 
 @Service
@@ -29,6 +31,9 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Autowired
 	private CurrentUserSessionRepository cSession;
+	
+	@Autowired
+	private IssueRepository ir;
 	
 	@Override
 	public Department addDepartment(Department d,String key) throws LoginException{
@@ -341,9 +346,5 @@ public class AdminServiceImpl implements AdminService{
 			throw new DepartmentException("Department with ID "+id+" does not exist");
 		}
 	}
-
-
-	
-	
 	
 }

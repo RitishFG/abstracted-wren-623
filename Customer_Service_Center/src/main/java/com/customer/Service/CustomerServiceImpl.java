@@ -15,6 +15,7 @@ import com.customer.Entity.Issue;
 import com.customer.Entity.Login;
 import com.customer.Entity.Status;
 import com.customer.Exception.CustomerException;
+import com.customer.Exception.IssueException;
 import com.customer.Repository.CurrentUserSessionRepository;
 import com.customer.Repository.CustomerRepository;
 import com.customer.Repository.IssueRepository;
@@ -32,10 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
 	private IssueRepository issueRepo;
 	
 	@Autowired
-	CustomerRepository customerDao;
+	private CustomerRepository customerDao;
 	
 	@Autowired
-	CurrentUserSessionRepository sessionDao;
+	private CurrentUserSessionRepository sessionDao;
 
 	@Override
 	public Customer registerCustomer(Customer customer) {
@@ -56,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
 			Customer existCustomer = customerDao.findByEmail(login.getEmail());
 
 			if (existCustomer == null)
-				throw new CustomerException("Please Enter a valid login");
+				throw new CustomerException("Please Enter a valid login details");
 			else
 				existCustomer.setPassword(login.getPassword());
 				customerDao.save(existCustomer);
@@ -182,6 +183,29 @@ public class CustomerServiceImpl implements CustomerService {
 			}
 			
 		}
+	}
+
+	@Override
+	public Issue registerIssue(Issue i,String key) throws IssueException, CustomerException {
+
+		CurrentUserSession cSession = usersession.findByUuid(key);
+		if(cSession==null) 
+		{
+			throw new CustomerException("Customers needs to login");
+		}
+		Optional<Customer>opt=customerRepository.findById(cSession.getId());
+		if(opt.isPresent())
+		{
+			Customer c=opt.get();
+			i.setCustomer(c);
+			c.getIssue().add(i);
+			return issueRepo.save(i);
+		}
+		else
+		{
+			throw new CustomerException("Invalid Customer");
+		}
+		
 	}
 	
 	

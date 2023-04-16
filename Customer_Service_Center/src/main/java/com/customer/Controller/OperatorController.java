@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.customer.Entity.Customer;
 import com.customer.Entity.Issue;
+import com.customer.Entity.Solution;
 import com.customer.Entity.Status;
 import com.customer.Exception.CustomerException;
 import com.customer.Exception.IssueException;
+import com.customer.Exception.LoginException;
 import com.customer.Service.OperatorService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/OperatorController")
@@ -41,13 +45,13 @@ public class OperatorController {
 	}
 	
 	@PutMapping("/IssueId/status")
-	public ResponseEntity<String> CloseCustomerIssue(@PathVariable int IssueId, @PathVariable Status status){
+	public ResponseEntity<String> CloseCustomerIssue(@PathVariable int IssueId, @PathVariable Status status) throws IssueException{
 		
 		return new ResponseEntity<String>(service.closeCustomerIssue(IssueId, status), HttpStatus.OK);
 			
 	}
 	
-	@GetMapping("/customer")
+	@GetMapping("/customers")
 	public ResponseEntity<List<Customer>> getAllCustomer() throws CustomerException{
 		
 		return new ResponseEntity<List<Customer>>(service.findAllCustomer(), HttpStatus.OK);
@@ -60,22 +64,28 @@ public class OperatorController {
 		return new ResponseEntity<Customer>(service.findByCustomerId(cusId), HttpStatus.OK);
 	}
 	
-//	@GetMapping("/customer/{name}")
-//	public ResponseEntity<List<Customer>> findCustomerByName(@PathVariable String name) throws CustomerException{
-//		
-//		return new ResponseEntity<List<Customer>>(service.findCustomerByName(name), HttpStatus.OK);
-//	}
+	@GetMapping("/customerName/{name}")
+	public ResponseEntity<List<Customer>> findCustomerByName(@PathVariable String name) throws CustomerException{
+		
+		return new ResponseEntity<List<Customer>>(service.findCustomerByFirstName(name), HttpStatus.OK);
+	}
 	
-	@GetMapping("/customer/{email}")
+	@GetMapping("/customerEmail/{email}")
 	public ResponseEntity<Customer> findByEmail(@PathVariable ("email") String email) throws CustomerException{
 		
 		return new ResponseEntity<Customer>(service.findCustomerByEmail(email), HttpStatus.OK);
 	}
 	
-	@GetMapping("/customer/{mobile}")
+	@GetMapping("/customerMobile/{mobile}")
 	public ResponseEntity<Customer> findByMobileCustomer(@PathVariable String mobile) throws CustomerException{
 		
 		return new ResponseEntity<Customer>(service.findCustomerByMobile(mobile), HttpStatus.OK);
+	}
+	@PostMapping("/solution/{key}")
+	public ResponseEntity<Solution>provideSolution(@Valid @RequestBody Solution s,@PathVariable("key")String key) throws LoginException, IssueException
+	{
+		Solution sol=service.provideSolution(s, key);
+		return new ResponseEntity<>(sol,HttpStatus.OK);
 	}
 
 }

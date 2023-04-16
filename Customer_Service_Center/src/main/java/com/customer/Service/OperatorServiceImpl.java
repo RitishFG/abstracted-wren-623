@@ -6,11 +6,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.customer.Entity.CurrentUserSession;
 import com.customer.Entity.Customer;
 import com.customer.Entity.Issue;
+import com.customer.Entity.Operator;
+import com.customer.Entity.Solution;
 import com.customer.Entity.Status;
 import com.customer.Exception.CustomerException;
 import com.customer.Exception.IssueException;
+import com.customer.Exception.LoginException;
+import com.customer.Repository.CurrentUserSessionRepository;
 import com.customer.Repository.CustomerRepository;
 import com.customer.Repository.IssueRepository;
 import com.customer.Repository.OperatorRepository;
@@ -29,6 +34,11 @@ public class OperatorServiceImpl implements OperatorService {
 	@Autowired
 	private CustomerRepository customerDao;
 	
+	@Autowired
+	private CurrentUserSessionRepository cSession;
+	
+	@Autowired
+	private OperatorRepository or;
 	
 	@Override
 	public String AddCustomerIssue(Customer customer) throws CustomerException {
@@ -168,6 +178,42 @@ public class OperatorServiceImpl implements OperatorService {
 			throw new IssueException("No Record found with the IssueId " + IssueId);
 		}
 		
+	}
+
+	@Override
+	public Solution provideSolution(Solution s, String key) throws LoginException, IssueException {
+		CurrentUserSession cOper=cSession.findByUuid(key);
+		if(cOper==null)
+		{
+//			if not then throw exception 
+			throw new LoginException("Operator needs to Login first");
+		}
+//		if(cOper.getId()!=s.getOperator().getOperatorId())
+//		{
+//			throw new LoginException("Incorrect UUID for Operator "+s.getOperator().getOperatorId());
+//		}
+		else
+		{
+			Optional<Issue>opt=issueDoa.findById(s.getIssue().getIssueId());
+			if(opt.isPresent())
+			{
+				Issue i=opt.get();
+				i.setSolution(s);
+				Optional<Operator>opt2=or.findById(cOper.getId());
+				if(opt2.isEmpty())
+				{
+					throw new LoginException("Invalid ID");
+				}
+				Operator o=opt2.get();
+				i.getSolution().setOperator(o);
+				Issue is=issueDoa.save(i);
+				return is.getSolution();
+			}
+			else
+			{
+				throw new IssueException("Incorrect Issue ID "+s.getIssue().getIssueId());
+			}
+		}
 	}
 
 }

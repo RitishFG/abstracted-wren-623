@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.customer.DTO.OperatorDTO;
 import com.customer.Entity.Department;
 import com.customer.Entity.Operator;
+import com.customer.Entity.Solution;
 import com.customer.Exception.DepartmentException;
+import com.customer.Exception.IssueException;
 import com.customer.Exception.LoginException;
 import com.customer.Exception.OperatorException;
 import com.customer.Service.AdminService;
@@ -96,4 +98,6 @@ public class AdminController {
 		List<Operator>list=adminService.getAllOperatorWithDeptId(id, key);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
+	
+	
 }

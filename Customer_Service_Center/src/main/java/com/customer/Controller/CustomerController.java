@@ -16,6 +16,7 @@ import com.customer.Entity.Customer;
 import com.customer.Entity.Issue;
 import com.customer.Entity.Login;
 import com.customer.Exception.CustomerException;
+import com.customer.Exception.IssueException;
 import com.customer.Service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -27,14 +28,14 @@ public class CustomerController {
     @Autowired
 	private CustomerService customerService;
     
-    @PostMapping("/register")
+    @PostMapping("/customer/register")
     public ResponseEntity<Customer> saveCustomerHandler(@Valid@RequestBody Customer customer){
     	Customer customer1 = customerService.registerCustomer(customer);
     	
     	return new ResponseEntity<>(customer1, HttpStatus.ACCEPTED);
     	
     }
-    @PutMapping("/changepassword")
+    @PutMapping("/customer/changepassword")
     public ResponseEntity<String> changePasswordHandler(@RequestBody Login login) throws CustomerException{
     	
     	String massage=customerService.changePassword(login);
@@ -42,7 +43,7 @@ public class CustomerController {
     	return new ResponseEntity<String>(massage, HttpStatus.OK);
     	
     }
-    @GetMapping("/forgetPassword/{id}")
+    @GetMapping("/customer/forgetPassword/{id}")
     public ResponseEntity<String> forgetPasswordHandler (@PathVariable("id")Integer id)  throws CustomerException{
     	
     	String massage=customerService.forgetPassword(id);
@@ -50,7 +51,7 @@ public class CustomerController {
     	return new ResponseEntity<String>(massage, HttpStatus.OK);
     	
     }
-    @GetMapping("/emailPassword/{id}/{key}")
+    @GetMapping("/customer/emailPassword/{id}/{key}")
     public ResponseEntity<Customer> emailPasswordHandler (@PathVariable("id")Integer id,@PathVariable("key")String key)  throws CustomerException{
     	
     	Customer massage=customerService.emailPassword(id, key);
@@ -59,7 +60,7 @@ public class CustomerController {
     	
     }
     
-    @GetMapping("/issue/{id}/{key}")
+    @GetMapping("/customer/issue/{id}/{key}")
     public ResponseEntity<Issue> getIssueById(@PathVariable("id") Integer id,@PathVariable("key") String key) throws CustomerException{
     	Issue issue = customerService.viewissue(id, key);
     	
@@ -67,7 +68,7 @@ public class CustomerController {
     	
     }
     
-    @GetMapping("/Allissue/{id}/{key}")
+    @GetMapping("/customer/Allissue/{id}/{key}")
     public ResponseEntity<List<Issue>> getAllIssues(@PathVariable("id") Integer Id, @PathVariable("key") String key) throws CustomerException{
     	List<Issue> issue1 = customerService.getAllIssue(Id,key);
     	
@@ -75,7 +76,7 @@ public class CustomerController {
     	
     }
     
-    @PutMapping("/Openissue/{id}/{cid}/{key}")
+    @PutMapping("/customer/Openissue/{id}/{cid}/{key}")
     public ResponseEntity<String> OpenIssue(@PathVariable("id") Integer Id,@PathVariable("cid") Integer Cid, @PathVariable("key") String key) throws CustomerException{
     	String s = customerService.reopenIssue(Id, Cid, key);
     	
@@ -83,6 +84,11 @@ public class CustomerController {
     	
     }
 
-	
+	@PostMapping("/customeraddIssue/{key}")
+	public ResponseEntity<Issue> addNewIssue(@RequestBody Issue issue,@PathVariable("key")String key) throws IssueException, CustomerException
+	{
+		Issue i=customerService.registerIssue(issue, key);
+		return new ResponseEntity<>(i,HttpStatus.OK);
+	}
 
 }

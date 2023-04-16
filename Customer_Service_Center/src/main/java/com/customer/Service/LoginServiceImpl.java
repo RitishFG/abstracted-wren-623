@@ -118,7 +118,7 @@ public class LoginServiceImpl implements LoginService {
 
 			}
 
-			if (existingOperator.equals(login.getPassword())) {
+			if (existingOperator.getPassword().equals(login.getPassword())) {
 
 				String key = UUID.randomUUID().toString();
 

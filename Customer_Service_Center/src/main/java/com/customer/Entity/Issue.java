@@ -33,6 +33,7 @@ public class Issue {
 	private Status status;
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "call_id")
+	@JsonIgnore
 	private Call call;
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

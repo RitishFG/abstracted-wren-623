@@ -3,6 +3,7 @@ package com.customer.Entity;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,11 +24,12 @@ public class Solution {
 	private String description;
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate date;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="issue_id")
 	private Issue issue;
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="operator_id")
+	@JsonIgnore
 	private Operator operator;
 	public Solution()
 	{

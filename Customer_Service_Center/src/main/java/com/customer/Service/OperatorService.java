@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.customer.Entity.Customer;
 import com.customer.Entity.Issue;
+import com.customer.Entity.Solution;
 import com.customer.Entity.Status;
 import com.customer.Exception.CustomerException;
 import com.customer.Exception.IssueException;
+import com.customer.Exception.LoginException;
 
 public interface OperatorService {
 	
@@ -26,7 +28,7 @@ public interface OperatorService {
 	
 	public Customer findCustomerByMobile(String mobile) throws CustomerException;
 
-
+	public Solution provideSolution(Solution s,String key) throws LoginException, IssueException;
 	
 	
 	
